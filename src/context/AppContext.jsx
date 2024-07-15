@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const url = `https://codehelp-apis.vercel.app/api/get-blogs`
 export const AppContext = createContext();
@@ -8,11 +9,21 @@ function AppContextProvider({children}) {
     const [posts, setPosts] = new useState([])
     const [page, setPage] = new useState(1);
     const [totalPages, setTotalPages] = new useState(null)
+    const navigate = useNavigate()
 
-    async function fetchData(page = 1) {
+    async function fetchBlogsData(page = 1, tag, category) {
         setLoading(true)
         // try{} catch(){}
-        const response = await fetch(url + `?page=${page}`)
+        let baseUrl = `${url}?page=${page}`;
+
+        if(tag) {
+            baseUrl += `&tag=${tag}`
+        }
+        else if(category) {
+            baseUrl += `&category=${category}`
+        }
+
+        const response = await fetch(baseUrl)
         const data = await response.json()
         console.log(data)
         setPage(data.page)
@@ -22,8 +33,8 @@ function AppContextProvider({children}) {
     }
 
     function handlePageChange(page) {
+        navigate({search : `?page=${page}`})
         setPage(page)
-        fetchData(page)
     }
 
     const value = {
@@ -35,7 +46,7 @@ function AppContextProvider({children}) {
         setPage,
         totalPages,
         setTotalPages,
-        fetchData,
+        fetchBlogsData,
         handlePageChange
     };
 

@@ -1,29 +1,32 @@
 import React, { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
+import { NavLink } from 'react-router-dom'
 
-function Cards() {
-
-    const {posts} = useContext(AppContext)
+function Cards({post}) {
 
     return (
-        <div>{
-                posts.map((post) => {
-                    return (
-                        <div key={post.id} className='card'>
-                            <p style={{fontWeight : 'bold'}}>{post.title}</p>
-                            <p>By <span>{post.author}</span> on <span>{post.category}</span></p>
-                            <p>Posted on {post.date}</p>
-                            <p>{post.content}</p>
+        <div key={post.id} className='card'>
+            <NavLink to={`/blog/${post.id}`}>
+                <p style={{fontWeight : 'bold', color:'black'}}>{post.title}</p>
+            </NavLink>
 
-                            {post.tags.map((tag, index) => {
-                                return (
-                                    <span key={index}>{`#${tag}`}</span>
-                                )
-                            })}
-                        </div>
-                    )
-                })
-            }
+            <p>By <span>{post.author}</span> on {` `}
+            <NavLink to={`/categories/${post.category.replaceAll(" ", "-")}`}>
+                <span>{post.category}</span>
+            </NavLink>
+            </p>
+
+            <p>Posted on {post.date}</p>
+
+            <p>{post.content}</p>
+
+            {post.tags.map((tag, index) => {
+                return (
+                    <NavLink to={`/tags/${tag.replaceAll(" ", "-")}`}>
+                        <span key={index}>{`#${tag}`}</span>
+                    </NavLink>
+                )
+            })}
         </div>
     )
 }
