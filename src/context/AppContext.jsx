@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const url = `https://codehelp-apis.vercel.app/api/get-blogs`
 export const AppContext = createContext();
 
+// export default
 function AppContextProvider({children}) {
     const [loading, setLoading] = new useState(false)
     const [posts, setPosts] = new useState([])
